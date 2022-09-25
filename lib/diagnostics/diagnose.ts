@@ -1,6 +1,5 @@
 import "source-map-support/register";
 import fs from "fs/promises";
-import os from "os";
 import path from "path";
 import util from "util";
 import {
@@ -14,7 +13,6 @@ import {
 } from "@cucumber/cucumber-expressions";
 import { generateMessages } from "@cucumber/gherkin";
 import { IdGenerator, SourceMediaType } from "@cucumber/messages";
-import hook from "node-hook";
 import * as esbuild from "esbuild";
 import { assert, assertAndReturn } from "../assertions";
 import { createAstIdMap } from "../ast-helpers";
@@ -79,8 +77,12 @@ export function compareStepDefinition(
 ) {
   return (
     expressionToString(a.expression) === expressionToString(b.expression) &&
-    comparePosition(a.position!, b.position!)
+    comparePosition(position(a), position(b))
   );
+}
+
+export function position(definition: IStepDefinition<unknown[]>): Position {
+  return assertAndReturn(definition.position, "Expected to find a position");
 }
 
 export async function diagnose(configuration: {
@@ -155,7 +157,7 @@ export async function diagnose(configuration: {
 
         try {
           require(outputFileName);
-        } catch (e: any) {
+        } catch (e: unknown) {
           console.log(util.inspect(e));
 
           throw new Error(
@@ -169,8 +171,8 @@ export async function diagnose(configuration: {
       /**
        * Delete without regard for errors.
        */
-      await fs.rm(inputFileName).catch(() => {});
-      await fs.rm(outputFileName).catch(() => {});
+      await fs.rm(inputFileName).catch(() => true);
+      await fs.rm(outputFileName).catch(() => true);
     }
 
     const options = {
@@ -253,7 +255,8 @@ export async function diagnose(configuration: {
             result.unmatchedSteps.push({
               step: {
                 source: testFile,
-                line: astNode.location?.line!,
+                line: astNode.location.line,
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 text: step.text!,
               },
               argument,
@@ -279,7 +282,8 @@ export async function diagnose(configuration: {
 
             usage.steps.push({
               source: testFile,
-              line: astNode.location?.line!,
+              line: astNode.location?.line,
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               text: step.text!,
             });
           } else {
@@ -296,7 +300,8 @@ export async function diagnose(configuration: {
 
               usage.steps.push({
                 source: testFile,
-                line: astNode.location?.line!,
+                line: astNode.location.line,
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 text: step.text!,
               });
             }
@@ -304,7 +309,8 @@ export async function diagnose(configuration: {
             result.ambiguousSteps.push({
               step: {
                 source: testFile,
-                line: astNode.location?.line!,
+                line: astNode.location.line,
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 text: step.text!,
               },
               definitions: matchingStepDefinitions,

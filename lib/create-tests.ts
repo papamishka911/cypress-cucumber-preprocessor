@@ -51,7 +51,9 @@ import { indent, stripIndent } from "./helpers/strings";
 import { generateSnippet } from "./snippets";
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace globalThis {
+    // eslint-disable-next-line no-var
     var __cypress_cucumber_preprocessor_dont_use_this: true | undefined;
   }
 }
@@ -459,13 +461,13 @@ function createPickle(
           return cy.wrap(start, { log: false });
         })
           .then((start) => {
-            const ensureChain = (value: any): Cypress.Chainable<any> =>
+            const ensureChain = (value: unknown): Cypress.Chainable<unknown> =>
               Cypress.isCy(value) ? value : cy.wrap(value, { log: false });
 
             try {
               return ensureChain(
                 registry.runStepDefininition(this, text, argument)
-              ).then((result: any) => {
+              ).then((result: unknown) => {
                 return {
                   start,
                   result,
@@ -680,7 +682,7 @@ export default function createTests(
 
     if (
       remainingSteps.length > 0 &&
-      (this.currentTest?.state as any) !== "pending"
+      (this.currentTest?.state as unknown) !== "pending"
     ) {
       const error = assertAndReturn(
         this.currentTest?.err?.message,

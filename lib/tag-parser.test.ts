@@ -4,7 +4,7 @@ import assert from "assert";
 
 import { tagToCypressOptions } from "./tag-parser";
 
-function example(tag: string, expectedOptions: any) {
+function example(tag: string, expectedOptions: Record<string, unknown>) {
   it(`should return ${util.inspect(expectedOptions)} for ${tag}`, () => {
     const actualOptions = tagToCypressOptions(tag);
 

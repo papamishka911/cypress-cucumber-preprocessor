@@ -28,12 +28,6 @@ import {
 import { assertAndReturn } from "../assertions";
 import { generateSnippet } from "../snippets";
 
-const TEMPLATE = `
-Given("[expression]", function ([arguments]) {
-  return "pending";
-});
-`.trim();
-
 export function log(...lines: string[]) {
   console.log(lines.join("\n"));
 }
@@ -66,8 +60,12 @@ export function compareStepDefinition(
 ) {
   return (
     expressionToString(a.expression) === expressionToString(b.expression) &&
-    comparePosition(a.position!, b.position!)
+    comparePosition(position(a), position(b))
   );
+}
+
+export function position(definition: IStepDefinition<unknown[]>): Position {
+  return assertAndReturn(definition.position, "Expected to find a position");
 }
 
 export function groupToMap<T, K>(
@@ -82,6 +80,7 @@ export function groupToMap<T, K>(
 
     for (const existingKey of map.keys()) {
       if (compareKeyFn(key, existingKey)) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         map.get(existingKey)!.push(el);
         continue el;
       }
@@ -122,6 +121,7 @@ export function createDefinitionsUsage(
   const groups = mapValues(
     groupToMap(
       result.definitionsUsage,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       (definitionsUsage) => definitionsUsage.definition.position!.source,
       strictCompare
     ),
@@ -143,9 +143,9 @@ export function createDefinitionsUsage(
     .sort((a, b) => a[0].localeCompare(b[0]))
     .flatMap(([, matches]) => {
       return Array.from(matches.entries())
-        .sort((a, b) => a[0].position?.line! - b[0].position?.line!)
+        .sort((a, b) => position(a[0]).line - position(b[0]).line)
         .map<[string, string]>(([stepDefinition, steps]) => {
-          const { expression, position } = stepDefinition;
+          const { expression } = stepDefinition;
 
           const right = [
             inspect(
@@ -159,9 +159,9 @@ export function createDefinitionsUsage(
           ].join("\n");
 
           const left = [
-            ensureIsRelative(projectRoot, position!.source) +
+            ensureIsRelative(projectRoot, position(stepDefinition).source) +
               ":" +
-              position!.line,
+              position(stepDefinition).line,
             ...steps.map((step) => {
               return (
                 ensureIsRelative(projectRoot, step.source) + ":" + step.line
@@ -214,8 +214,8 @@ export function createAmbiguousStep(
             definition.expression instanceof RegularExpression
               ? definition.expression.regexp
               : definition.expression.source
-          )} (${relativeToProjectRoot(definition.position!.source)}:${
-            definition.position!.line
+          )} (${relativeToProjectRoot(position(definition).source)}:${
+            position(definition).line
           })`
       )
       .forEach(append);

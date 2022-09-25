@@ -32,7 +32,7 @@ export default class DataTable {
     }
   }
 
-  hashes(): any[] {
+  hashes(): Record<string, string>[] {
     const copy = this.raw();
     const keys = copy[0];
     const valuesArray = copy.slice(1);
@@ -49,7 +49,7 @@ export default class DataTable {
     return copy;
   }
 
-  rowsHash() {
+  rowsHash(): Record<string, string> {
     return Object.fromEntries(
       this.raw().map<[string, string]>((values) => {
         const [first, second, ...rest] = values;
@@ -65,7 +65,7 @@ export default class DataTable {
     );
   }
 
-  transpose() {
+  transpose(): DataTable {
     const transposed = this.rawTable[0].map((x, i) =>
       this.rawTable.map((y) => y[i])
     );

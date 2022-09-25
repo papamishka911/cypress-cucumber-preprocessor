@@ -36,8 +36,9 @@
     "build": "tsc",
     "watch": "tsc --watch",
     "fmt": "prettier --ignore-path .gitignore --write '**/*.ts'",
-    "test": "npm run test:fmt && npm run test:types && npm run test:unit && npm run test:integration",
+    "test": "npm run test:fmt && npm run test:lint && npm run test:types && npm run test:unit && npm run test:integration",
     "test:fmt": "prettier --ignore-path .gitignore --check '**/*.ts'",
+    "test:lint": "eslint .",
     "test:types": "tsd",
     "test:unit": "mocha lib/**/*.test.ts",
     "test:run-all-specs": "mocha --timeout 0 test/run-all-specs.ts",
@@ -81,10 +82,14 @@
     "@types/jsdom": "^20.0.0",
     "@types/module-alias": "^2.0.1",
     "@types/node-hook": "^1.0.1",
+    "@types/pngjs": "^6.0.1",
     "@types/prettier": "^2.6.3",
     "@types/stream-buffers": "^3.0.4",
+    "@typescript-eslint/eslint-plugin": "^5.38.0",
+    "@typescript-eslint/parser": "^5.38.0",
     "ast-types": "^0.15.2",
     "cypress": "^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0",
+    "eslint": "^8.24.0",
     "fs-extra": "^10.1.0",
     "jsdom": "^20.0.0",
     "mocha": "^9.2.1",
@@ -111,5 +116,33 @@
   },
   "engines": {
     "node": ">=14.14.0"
+  },
+  "eslintConfig": {
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "rules": {
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          "argsIgnorePattern": "^_",
+          "varsIgnorePattern": "^_",
+          "caughtErrorsIgnorePattern": "^_"
+        }
+      ],
+      "@typescript-eslint/no-explicit-any": 0
+    },
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "ignorePatterns": [
+      "examples/**/*",
+      "tmp/**/*",
+      "**/*.js",
+      "**/*.d.ts"
+    ],
+    "root": true
   }
 }

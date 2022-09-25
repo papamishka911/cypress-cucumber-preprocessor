@@ -29,10 +29,9 @@ import { rebuildOriginalConfigObject } from "./add-cucumber-preprocessor-plugin"
 const { stringify } = JSON;
 
 export async function compile(
-  this: any,
   configuration: ICypressConfiguration,
   data: string,
-  uri: string = this.resourcePath
+  uri: string
 ) {
   configuration = rebuildOriginalConfigObject(configuration);
 

@@ -8,8 +8,6 @@ import {
   IStepDefinitionBody,
 } from "./types";
 
-import * as Methods from "./methods";
-
 declare global {
   interface Window {
     testState: {
@@ -51,12 +49,15 @@ export function isFeature(): boolean {
   throw createUnimplemented();
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function doesFeatureMatch(expression: string): boolean {
   throw createUnimplemented();
 }
 
 export function defineStep<T extends unknown[]>(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   description: string | RegExp,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   implementation: IStepDefinitionBody<T>
 ) {
   throw createUnimplemented();
@@ -65,17 +66,22 @@ export function defineStep<T extends unknown[]>(
 export { defineStep as Given, defineStep as When, defineStep as Then };
 
 export function Step(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   world: Mocha.Context,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   text: string,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   argument?: DataTable | string
 ) {
   throw createUnimplemented();
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function defineParameterType<T>(options: IParameterTypeDefinition<T>) {
   throw createUnimplemented();
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function attach(data: string | ArrayBuffer, mediaType?: string) {
   throw createUnimplemented();
 }
@@ -83,7 +89,9 @@ export function attach(data: string | ArrayBuffer, mediaType?: string) {
 export function Before(options: { tags?: string }, fn: IHookBody): void;
 export function Before(fn: IHookBody): void;
 export function Before(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   optionsOrFn: IHookBody | { tags?: string },
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   maybeFn?: IHookBody
 ) {
   throw createUnimplemented();
@@ -92,7 +100,9 @@ export function Before(
 export function After(options: { tags?: string }, fn: IHookBody): void;
 export function After(fn: IHookBody): void;
 export function After(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   optionsOrFn: IHookBody | { tags?: string },
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   maybeFn?: IHookBody
 ) {
   throw createUnimplemented();

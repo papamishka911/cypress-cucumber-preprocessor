@@ -11,11 +11,12 @@ function isObject(object: any): object is object {
   return typeof object === "object" && object != null;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 function hasOwnProperty<X extends {}, Y extends PropertyKey>(
   obj: X,
   prop: Y
 ): obj is X & Record<Y, unknown> {
-  return obj.hasOwnProperty(prop);
+  return Object.prototype.hasOwnProperty.call(obj, prop);
 }
 
 function* traverseTree(object: any): Generator<object, void, any> {
@@ -133,10 +134,10 @@ Then(
 
     assert.strictEqual(embedding.mime_type, "image/png");
 
-    const png = await new Promise<any>((resolve, reject) => {
+    const png = await new Promise<PNG>((resolve, reject) => {
       new PNG().parse(
-        toByteArray(embedding.data).buffer,
-        function (error: any, data: any) {
+        Buffer.from(toByteArray(embedding.data)),
+        function (error, data) {
           if (error) {
             reject(error);
           } else {
@@ -146,7 +147,7 @@ Then(
       );
     });
 
-    let expectedDimensions;
+    let expectedDimensions: { width: number; height: number };
 
     /**
      * See https://github.com/cypress-io/cypress/pull/15686 and https://github.com/cypress-io/cypress/pull/17309.

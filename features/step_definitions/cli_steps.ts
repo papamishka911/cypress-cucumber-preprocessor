@@ -1,9 +1,8 @@
 import util from "util";
-import { Given, When, Then } from "@cucumber/cucumber";
+import { When, Then } from "@cucumber/cucumber";
 import assert from "assert";
 import childProcess from "child_process";
 import stripAnsi from "strip-ansi";
-import { isPost10, isPre10 } from "../support/helpers";
 
 function execAsync(
   command: string

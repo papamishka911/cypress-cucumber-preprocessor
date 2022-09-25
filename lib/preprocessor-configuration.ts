@@ -10,7 +10,7 @@ import { ensureIsRelative } from "./helpers/paths";
 
 import { isString, isStringOrStringArray, isBoolean } from "./type-guards";
 
-function hasOwnProperty<X extends {}, Y extends string>(
+function hasOwnProperty<X extends Record<string, unknown>, Y extends string>(
   value: X,
   property: Y
 ): value is X & Record<Y, unknown> {
@@ -19,7 +19,7 @@ function hasOwnProperty<X extends {}, Y extends string>(
 
 function validateConfigurationEntry(
   key: string,
-  value: unknown
+  value: Record<string, unknown>
 ): Partial<IPreprocessorConfiguration> {
   switch (key) {
     case "stepDefinitions":
@@ -125,7 +125,6 @@ function validateConfigurationEntry(
           `Expected an object (json), but got ${util.inspect(value)}`
         );
       }
-      let args: string[] | undefined;
       if (
         !hasOwnProperty(value, "enabled") ||
         typeof value.enabled !== "boolean"
@@ -221,7 +220,7 @@ function validateEnvironmentOverrides(
   }
 
   if (hasOwnProperty(environment, "jsonArgs")) {
-    let { jsonArgs } = environment;
+    const { jsonArgs } = environment;
     if (isString(jsonArgs)) {
       overrides.jsonArgs = [jsonArgs];
     }
@@ -495,7 +494,7 @@ async function cosmiconfigResolver(projectRoot: string) {
 
 export type ConfigurationFileResolver = (
   projectRoot: string
-) => any | Promise<any>;
+) => unknown | Promise<unknown>;
 
 export async function resolve(
   cypressConfig: ICypressConfiguration,

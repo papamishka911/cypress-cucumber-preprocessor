@@ -197,9 +197,10 @@ export class Registry {
     world: Mocha.Context,
     text: string,
     argument?: DataTable | string
-  ): any {
+  ): unknown {
     const stepDefinition = this.resolveStepDefintion(text);
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const args = stepDefinition.expression
       .match(text)!
       .map((match) => match.getValue(world));
@@ -229,7 +230,9 @@ export class Registry {
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace globalThis {
+    // eslint-disable-next-line no-var
     var __cypress_cucumber_preprocessor_registry_dont_use_this:
       | Registry
       | undefined;

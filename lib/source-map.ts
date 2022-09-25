@@ -1,4 +1,5 @@
 import ErrorStackParser from "error-stack-parser";
+import { assertAndReturn } from "./assertions";
 
 export interface Position {
   line: number;
@@ -12,9 +13,18 @@ export function retrievePositionFromSourceMap(): Position {
   const relevantFrame = stack[4];
 
   return {
-    line: relevantFrame.getLineNumber()!,
-    column: relevantFrame.getColumnNumber()!,
-    source: relevantFrame.fileName!,
+    line: assertAndReturn(
+      relevantFrame.getLineNumber(),
+      "Expected to find a line number"
+    ),
+    column: assertAndReturn(
+      relevantFrame.getColumnNumber(),
+      "Expected to find a column number"
+    ),
+    source: assertAndReturn(
+      relevantFrame.fileName,
+      "Expected to find a filename"
+    ),
   };
 }
 

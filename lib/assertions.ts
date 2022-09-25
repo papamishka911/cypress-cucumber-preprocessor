@@ -8,7 +8,7 @@ export function fail(message: string) {
   );
 }
 
-export function assert(value: any, message: string): asserts value {
+export function assert(value: unknown, message: string): asserts value {
   if (value) {
     return;
   }
@@ -25,7 +25,7 @@ export function assertAndReturn<T>(
 }
 
 export function assertIsString(
-  value: any,
+  value: unknown,
   message: string
 ): asserts value is string {
   assert(isString(value), message);

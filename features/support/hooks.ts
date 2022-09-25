@@ -1,4 +1,3 @@
-import { version as cypressVersion } from "cypress/package.json";
 import { After, Before, formatterHelpers } from "@cucumber/cucumber";
 import path from "path";
 import assert from "assert";
@@ -138,15 +137,3 @@ After(function () {
     );
   }
 });
-
-function addCucumberPreprocessorPlugin(on: any, config: any) {
-  throw new Error("Function not implemented.");
-}
-
-function createBundler(arg0: { plugins: any[] }): any {
-  throw new Error("Function not implemented.");
-}
-
-function createEsbuildPlugin(config: any) {
-  throw new Error("Function not implemented.");
-}

@@ -23,7 +23,7 @@ export function transform(
   let buffer = Buffer.alloc(0);
 
   return new Transform({
-    transform(chunk: any, encoding: string, done: TransformCallback) {
+    transform(chunk, encoding, done) {
       buffer = Buffer.concat([buffer, chunk]);
       done();
     },

@@ -27,7 +27,7 @@ describe("Run all specs", () => {
       )
     );
 
-    this.tmpDir = path.join(projectPath, "tmp", title.replace(/[\(\)\?]/g, ""));
+    this.tmpDir = path.join(projectPath, "tmp", title.replace(/[()?]/g, ""));
 
     await fs.rm(this.tmpDir, { recursive: true, force: true });
 

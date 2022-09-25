@@ -12,6 +12,7 @@ export function createEsbuildPlugin(
   return {
     name: "feature",
     setup(build) {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const fs = require("fs") as typeof import("fs");
 
       build.onLoad({ filter: /\.feature$/ }, async (args) => {
