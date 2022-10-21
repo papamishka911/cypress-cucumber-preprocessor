@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## v13.0.3
+
+- Performance improvements to diagnostics.
+
 ## v13.0.2
 
 - Correctly assign `testState.pickleStep`, fixes [#836](https://github.com/badeball/cypress-cucumber-preprocessor/issues/836).
