@@ -12,7 +12,7 @@ import {
   getTestFiles,
 } from "@badeball/cypress-configuration";
 import { addAlias } from "module-alias";
-import Table from "cli-table3";
+import Table from "cli-table";
 import ancestor from "common-ancestor-path";
 import { resolve as resolvePreprocessorConfiguration } from "../preprocessor-configuration";
 import { Position } from "../source-map";
