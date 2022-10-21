@@ -23,21 +23,13 @@ import { ensureIsAbsolute } from "./helpers/paths";
 export async function getStepDefinitionPaths(
   stepDefinitionPatterns: string[]
 ): Promise<string[]> {
-  const files = (
+  return (
     await Promise.all(
       stepDefinitionPatterns.map((pattern) =>
         util.promisify(glob)(pattern, { nodir: true })
       )
     )
   ).reduce((acum, el) => acum.concat(el), []);
-
-  if (files.length === 0) {
-    debug("found no step definitions");
-  } else {
-    debug(`found step definitions ${util.inspect(files)}`);
-  }
-
-  return files;
 }
 
 function trimFeatureExtension(filepath: string) {
@@ -105,8 +97,6 @@ export function getStepDefinitionPatternsPost10(
 
   const stepDefinitions = [configuration.preprocessor.stepDefinitions].flat();
 
-  debug(`looking for step definitions using ${util.inspect(stepDefinitions)}`);
-
   return stepDefinitions
     .flatMap((pattern) => {
       if (pattern.includes("[filepath]") && pattern.includes("[filepart]")) {
@@ -159,8 +149,6 @@ export function getStepDefinitionPatternsPre10(
   debug(`replacing [filepart] with ${util.inspect(parts)}`);
 
   const stepDefinitions = [configuration.preprocessor.stepDefinitions].flat();
-
-  debug(`looking for step definitions using ${util.inspect(stepDefinitions)}`);
 
   return stepDefinitions
     .flatMap((pattern) => {

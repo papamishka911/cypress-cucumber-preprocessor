@@ -1,5 +1,7 @@
 import path from "path";
 
+import { inspect } from "util";
+
 import { generateMessages } from "@cucumber/gherkin";
 
 import { IdGenerator, SourceMediaType } from "@cucumber/messages";
@@ -25,6 +27,8 @@ import { notNull } from "./type-guards";
 import { ensureIsRelative } from "./helpers/paths";
 
 import { rebuildOriginalConfigObject } from "./add-cucumber-preprocessor-plugin";
+
+import debug from "./debug";
 
 const { stringify } = JSON;
 
@@ -82,6 +86,10 @@ export async function compile(
 
   const { stepDefinitions } = preprocessor;
 
+  debug(
+    `resolving step definitions using template(s) ${inspect(stepDefinitions)}`
+  );
+
   const stepDefinitionPatterns = getStepDefinitionPatterns(
     {
       cypress: configuration,
@@ -90,9 +98,31 @@ export async function compile(
     uri
   );
 
+  debug(
+    `for ${inspect(
+      ensureIsRelative(configuration.projectRoot, uri)
+    )} yielded patterns ${inspect(
+      stepDefinitionPatterns.map((pattern) =>
+        ensureIsRelative(configuration.projectRoot, pattern)
+      )
+    )}`
+  );
+
   const stepDefinitionPaths = await getStepDefinitionPaths(
     stepDefinitionPatterns
   );
+
+  if (stepDefinitionPaths.length === 0) {
+    debug("found no step definitions");
+  } else {
+    debug(
+      `found step definitions ${inspect(
+        stepDefinitionPaths.map((path) =>
+          ensureIsRelative(configuration.projectRoot, path)
+        )
+      )}`
+    );
+  }
 
   const prepareLibPath = (...parts: string[]) =>
     stringify(path.join(__dirname, ...parts));
