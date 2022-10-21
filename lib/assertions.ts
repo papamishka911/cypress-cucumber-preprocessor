@@ -9,7 +9,7 @@ export function fail(message: string) {
 }
 
 export function assert(value: unknown, message: string): asserts value {
-  if (value) {
+  if (value != null) {
     return;
   }
 

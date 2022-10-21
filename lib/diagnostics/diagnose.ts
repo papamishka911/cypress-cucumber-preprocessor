@@ -1,4 +1,3 @@
-import "source-map-support/register";
 import fs from "fs/promises";
 import path from "path";
 import util from "util";
@@ -14,6 +13,7 @@ import {
 import { generateMessages } from "@cucumber/gherkin";
 import { IdGenerator, SourceMediaType } from "@cucumber/messages";
 import * as esbuild from "esbuild";
+import sourceMap from "source-map";
 import { assert, assertAndReturn } from "../assertions";
 import { createAstIdMap } from "../ast-helpers";
 import { ensureIsRelative } from "../helpers/paths";
@@ -138,7 +138,7 @@ export async function diagnose(configuration: {
       const esbuildResult = await esbuild.build({
         entryPoints: [inputFileName],
         bundle: true,
-        sourcemap: true,
+        sourcemap: "external",
         outfile: outputFileName,
       });
 
@@ -167,12 +167,40 @@ export async function diagnose(configuration: {
       });
 
       registry.finalize();
+
+      const consumer = await new sourceMap.SourceMapConsumer(
+        (await fs.readFile(outputFileName + ".map")).toString()
+      );
+
+      for (const stepDefinition of registry.stepDefinitions) {
+        const originalPosition = position(stepDefinition);
+
+        const newPosition = consumer.originalPositionFor(originalPosition);
+
+        stepDefinition.position = {
+          line: assertAndReturn(
+            newPosition.line,
+            "Expected to find a line number"
+          ),
+          column: assertAndReturn(
+            newPosition.column,
+            "Expected to find a column number"
+          ),
+          source: assertAndReturn(
+            newPosition.source,
+            "Expected to find a source"
+          ),
+        };
+      }
+
+      consumer.destroy();
     } finally {
       /**
        * Delete without regard for errors.
        */
       await fs.rm(inputFileName).catch(() => true);
       await fs.rm(outputFileName).catch(() => true);
+      await fs.rm(outputFileName + ".map").catch(() => true);
     }
 
     const options = {
