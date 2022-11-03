@@ -12,7 +12,7 @@ Search the existing issues before logging a new one.
 
 ## 3. Do you have a question?
 
-The issue tracker is primarily for **issues**, in other words, bugs and suggestions. User support is generally not provided and if you have a *question*, please use [Stack Overflow](https://stackoverflow.com/questions/tagged/cypress-cucumber-preprocessor), your favorite search engine, or other resources. There *is* a [Gitter](https://gitter.im/cypress-io/cypress) channel for Cypress that you may try, but it doesn't specifically pertain to community-maintained plugins.
+The issue tracker is primarily for **issues**, in other words, bugs and suggestions. User support is generally not provided and if you have a *question*, please use [Stack Overflow](https://stackoverflow.com/questions/tagged/cypress-cucumber-preprocessor), your favorite search engine, or other resources. There *is* a [Discord](https://on.cypress.io/chat) server for Cypress that you may try, but it doesn't specifically pertain to community-maintained plugins.
 
 ## 4. Did you find a bug?
 
