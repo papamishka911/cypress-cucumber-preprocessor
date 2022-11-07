@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## v13.1.0
+
+- Better support for worlds in TypeScript, fixes [#864](https://github.com/badeball/cypress-cucumber-preprocessor/issues/864).
+
+- Extended documentation, particularly in regards to pairing step definitions.
+
 ## v13.0.3
 
 - Performance improvements to diagnostics.
