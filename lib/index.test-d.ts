@@ -109,6 +109,42 @@ After({ tags: "foo" }, function () {
   expectType<Mocha.Context>(this);
 });
 
+expectType<messages.GherkinDocument>(window.testState.gherkinDocument);
+expectType<messages.Pickle[]>(window.testState.pickles);
+expectType<messages.Pickle>(window.testState.pickle);
+expectType<messages.PickleStep | undefined>(window.testState.pickleStep);
+
+/**
+ * Extending world (example #1)
+ */
+interface MathWorld {
+  add(a: number, b: number): number;
+}
+
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Mocha {
+    // eslint-disable-next-line @typescript-eslint/no-empty-interface
+    interface Context extends MathWorld {}
+  }
+}
+
+Given(/foo/, function () {
+  expectType<number>(this.add(1, 2));
+});
+
+When(/foo/, function () {
+  expectType<number>(this.add(1, 2));
+});
+
+Then(/foo/, function () {
+  expectType<number>(this.add(1, 2));
+});
+
+/**
+ * Extending world (example #2)
+ */
+
 interface CustomWorld extends Mocha.Context {
   pageDriver: {
     navigateTo(url: string): void;
@@ -129,8 +165,3 @@ Then(/foo/, function (this: CustomWorld, url: string) {
   expectType<CustomWorld>(this);
   this.pageDriver.navigateTo(url);
 });
-
-expectType<messages.GherkinDocument>(window.testState.gherkinDocument);
-expectType<messages.Pickle[]>(window.testState.pickles);
-expectType<messages.Pickle>(window.testState.pickle);
-expectType<messages.PickleStep | undefined>(window.testState.pickleStep);

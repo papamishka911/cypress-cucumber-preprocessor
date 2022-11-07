@@ -73,10 +73,28 @@ If you're using TypeScript, you can get optimum type safety and completion based
 
 ```ts
 interface CustomWorld extends Mocha.Context {
-  eat: (count: number) => void;
+  eat(count: number): void;
 }
 
 When("I eat {int} cucumbers", function (this: CustomWorld, count: number) {
+  this.eat(count);
+});
+```
+
+Alternatively, you can extend the default type `Mocha.Context` using a declaration file like shown below.
+
+```ts
+// declarations.d.ts
+interface CustomWorld {
+  eat(count: number): void;
+}
+
+declare namespace Mocha {
+  interface Context extends CustomWorld {}
+}
+
+// steps.ts
+When("I eat {int} cucumbers", function (count: number) {
   this.eat(count);
 });
 ```
