@@ -7,6 +7,7 @@
 * [My JSON report isn't generated](#my-json-report-isnt-generated)
 * [JSON reports aren't generated in open / interactive mode](#json-reports-arent-generated-in-open--interactive-mode)
 * [I get `cypress_esbuild_preprocessor_1.createBundler is not a function`](#i-get-cypress_esbuild_preprocessor_1createbundler-is-not-a-function)
+* [I get `cypress_esbuild_preprocessor_1.default is not a function`](#i-get-cypress_esbuild_preprocessor_1default-is-not-a-function)
 
 ## `--env` / `tags` isn't picked up
 
@@ -49,3 +50,7 @@ import * as createBundler from "@bahmutov/cypress-esbuild-preprocessor";
 ```
 
 However, I recommend just using `esModuleInterop: true` if you don't fully understand the implications of disabling it.
+
+## I get `cypress_esbuild_preprocessor_1.default is not a function`
+
+See answer above.
