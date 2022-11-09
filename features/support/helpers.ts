@@ -8,7 +8,7 @@ export async function writeFile(filePath: string, fileContent: string) {
 }
 
 export function isPost10() {
-  return cypressVersion.startsWith("10.");
+  return parseInt(cypressVersion.split(".")[0], 10) >= 10;
 }
 
 export function isPre10() {

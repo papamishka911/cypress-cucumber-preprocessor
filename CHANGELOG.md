@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+- Drop support for Cypress v7.
+
+- Add support for Cypress v11.
+
 ## v13.1.0
 
 - Better support for worlds in TypeScript, fixes [#864](https://github.com/badeball/cypress-cucumber-preprocessor/issues/864).
