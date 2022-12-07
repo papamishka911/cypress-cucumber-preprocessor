@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+- Drop support for Cypress v8.
+
+- Add support for Cypress v12.
+
 ## v14.0.0
 
 - Drop support for Cypress v7.
