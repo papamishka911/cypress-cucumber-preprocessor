@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## v15.0.0
 
 - Drop support for Cypress v8.
 
