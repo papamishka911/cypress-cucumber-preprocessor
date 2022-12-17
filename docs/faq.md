@@ -8,7 +8,7 @@
 * [JSON reports aren't generated in open / interactive mode](#json-reports-arent-generated-in-open--interactive-mode)
 * [I get `cypress_esbuild_preprocessor_1.createBundler is not a function`](#i-get-cypress_esbuild_preprocessor_1createbundler-is-not-a-function)
 * [I get `cypress_esbuild_preprocessor_1.default is not a function`](#i-get-cypress_esbuild_preprocessor_1default-is-not-a-function)
-* [The members `And(..)` and `But(..)` are missing](#the-members-and-and-but-are-missing)
+* [The members `And(..)` and `But(..)` are missing](#function-members-and-and-but-are-missing)
 
 ## `--env` / `tags` isn't picked up
 
