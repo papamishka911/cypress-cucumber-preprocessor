@@ -9,6 +9,8 @@ import {
 } from "./constants";
 import { InternalSpecProperties } from "./create-tests";
 
+import { runStepWithLogGroup } from "./cypress";
+
 import DataTable from "./data_table";
 
 import { getRegistry } from "./registry";
@@ -31,7 +33,11 @@ function runStepDefininition(
   text: string,
   argument?: DataTable | string
 ) {
-  getRegistry().runStepDefininition(world, text, argument);
+  runStepWithLogGroup({
+    keyword: "Step",
+    text,
+    fn: () => getRegistry().runStepDefininition(world, text, argument),
+  });
 }
 
 function defineParameterType<T, C extends Mocha.Context>(

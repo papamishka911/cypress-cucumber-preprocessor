@@ -50,6 +50,8 @@ import { indent, stripIndent } from "./helpers/strings";
 
 import { generateSnippet } from "./snippets";
 
+import { runStepWithLogGroup } from "./cypress";
+
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace globalThis {
@@ -421,19 +423,6 @@ function createPickle(
           `Expected to find scenario step associated with id = ${pickleStep.astNodeIds?.[0]}`
         );
 
-        cy.then(() => {
-          window.testState.pickleStep = step.pickleStep;
-
-          Cypress.log({
-            name: "step",
-            displayName: assertAndReturn(
-              "keyword" in scenarioStep && scenarioStep.keyword,
-              "Expected to find a keyword in the scenario step"
-            ),
-            message: text,
-          });
-        });
-
         const argument: DataTable | string | undefined = pickleStep.argument
           ?.dataTable
           ? new DataTable(pickleStep.argument.dataTable)
@@ -442,6 +431,8 @@ function createPickle(
           : undefined;
 
         cy.then(() => {
+          window.testState.pickleStep = step.pickleStep;
+
           internalProperties.currentStep = { pickleStep };
 
           const start = createTimestamp();
@@ -461,13 +452,15 @@ function createPickle(
           return cy.wrap(start, { log: false });
         })
           .then((start) => {
-            const ensureChain = (value: unknown): Cypress.Chainable<unknown> =>
-              Cypress.isCy(value) ? value : cy.wrap(value, { log: false });
-
             try {
-              return ensureChain(
-                registry.runStepDefininition(this, text, argument)
-              ).then((result: unknown) => {
+              return runStepWithLogGroup({
+                keyword: assertAndReturn(
+                  "keyword" in scenarioStep && scenarioStep.keyword,
+                  "Expected to find a keyword in the scenario step"
+                ),
+                text,
+                fn: () => registry.runStepDefininition(this, text, argument),
+              }).then((result) => {
                 return {
                   start,
                   result,

@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+- Log steps and commands using log groups, fixes [#796](https://github.com/badeball/cypress-cucumber-preprocessor/issues/796).
+
 ## v15.0.0
 
 - Drop support for Cypress v8.
