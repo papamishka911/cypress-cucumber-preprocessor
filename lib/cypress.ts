@@ -8,7 +8,7 @@ export function runStepWithLogGroup(options: {
 }) {
   Cypress.log({
     name: options.keyword ?? "Step",
-    message: options.text,
+    message: `**${options.text}**`,
     groupStart: true,
   } as object);
 
