@@ -8,6 +8,7 @@
 * [JSON reports aren't generated in open / interactive mode](#json-reports-arent-generated-in-open--interactive-mode)
 * [I get `cypress_esbuild_preprocessor_1.createBundler is not a function`](#i-get-cypress_esbuild_preprocessor_1createbundler-is-not-a-function)
 * [I get `cypress_esbuild_preprocessor_1.default is not a function`](#i-get-cypress_esbuild_preprocessor_1default-is-not-a-function)
+* [The members `And(..)` and `But(..)` are missing](#function-members-and-and-but-are-missing)
 
 ## `--env` / `tags` isn't picked up
 
@@ -54,3 +55,7 @@ However, I recommend just using `esModuleInterop: true` if you don't fully under
 ## I get `cypress_esbuild_preprocessor_1.default is not a function`
 
 See answer above.
+
+## Function members `And(..)` and `But(..)` are missing
+
+These have been [deprecated](https://github.com/badeball/cypress-cucumber-preprocessor/issues/821).
