@@ -70,6 +70,8 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@babel/parser": "^7.20.7",
+    "@babel/types": "^7.20.7",
     "@bahmutov/cypress-esbuild-preprocessor": "^2.1.2",
     "@cucumber/cucumber": "^8.0.0",
     "@cucumber/pretty-formatter": "^1.0.0-alpha.0",
