@@ -361,12 +361,6 @@ function createPickle(
         cy.then(() => {
           delete window.testState.pickleStep;
 
-          Cypress.log({
-            name: "step",
-            displayName: hook.keyword,
-            message: "",
-          });
-
           const start = createTimestamp();
 
           messages.stack.push({
@@ -384,7 +378,11 @@ function createPickle(
           return cy.wrap(start, { log: false });
         })
           .then((start) => {
-            registry.runHook(this, hook);
+            runStepWithLogGroup({
+              fn: () => registry.runHook(this, hook),
+              keyword: hook.keyword,
+            });
+
             return cy.wrap(start, { log: false });
           })
           .then((start) => {

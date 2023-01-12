@@ -3,12 +3,12 @@ const ensureChain = (value: unknown): Cypress.Chainable<unknown> =>
 
 export function runStepWithLogGroup(options: {
   fn: () => unknown;
-  keyword?: string;
-  text: string;
+  keyword: string;
+  text?: string;
 }) {
   Cypress.log({
-    name: options.keyword ?? "Step",
-    message: `**${options.text}**`,
+    name: options.keyword,
+    message: options.text == null ? "" : `**${options.text}**`,
     groupStart: true,
   } as object);
 
