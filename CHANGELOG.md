@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## v15.1.1
 
 - Log hooks using log groups as well, fixes [#922](https://github.com/badeball/cypress-cucumber-preprocessor/issues/922).
 
