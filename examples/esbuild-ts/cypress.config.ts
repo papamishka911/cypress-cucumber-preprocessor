@@ -24,7 +24,6 @@ async function setupNodeEvents(
 export default defineConfig({
   e2e: {
     specPattern: "**/*.feature",
-    supportFile: false,
     setupNodeEvents,
   },
 });

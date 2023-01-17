@@ -39,7 +39,6 @@ const webpackConfig = (
 export default defineConfig({
   component: {
     specPattern: "**/*.feature",
-    supportFile: false,
     devServer(devServerConfig) {
       return devServer({
         ...devServerConfig,
