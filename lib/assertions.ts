@@ -2,10 +2,14 @@ import { isString } from "./type-guards";
 
 import { homepage } from "../package.json";
 
-export function fail(message: string) {
-  throw new Error(
+export function createError(message: string) {
+  return new Error(
     `${message} (this might be a bug, please report at ${homepage})`
   );
+}
+
+export function fail(message: string) {
+  throw createError(message);
 }
 
 export function assert(value: unknown, message: string): asserts value {

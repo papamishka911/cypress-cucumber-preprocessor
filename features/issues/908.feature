@@ -6,40 +6,18 @@ Feature: hide internals from cypress environment
       """
       Feature: a feature
         Scenario: hide internal state by default
-          * the internal state should not be visible
-
-        @reportInternalCucumberState
-        Scenario: expose internal state with tag
-          * the internal state should be visible
+          Then the visible internal state should be a mere reference
       """
     And a file named "cypress/support/step_definitions/steps.js" with:
       """
-      const { inspect } = require('util');
       const { Then } = require("@badeball/cypress-cucumber-preprocessor");
       const { INTERNAL_SPEC_PROPERTIES } = require("@badeball/cypress-cucumber-preprocessor/lib/constants");
-
-      Then("the internal state should not be visible", () => {
+      // From https://github.com/rfrench/chai-uuid/blob/master/index.js.
+      const UUID_V4_EXPR = /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i;
+      Then("the visible internal state should be a mere reference", () => {
         const properties = Cypress.env(INTERNAL_SPEC_PROPERTIES);
-        const serializedProperties = JSON.stringify(properties);
-        const inspectedProperties = inspect(properties, {depth: 0});
-
-        expect(properties).not.to.be.undefined;
-        expect(properties.pickle).to.be.undefined;
-        expect(serializedProperties).to.be.undefined;
-        expect(inspectedProperties).to.be.equal('{}');
-      });
-
-      Then("the internal state should be visible", () => {
-        const properties = Cypress.env(INTERNAL_SPEC_PROPERTIES);
-        const serializedProperties = JSON.stringify(properties);
-        const inspectedProperties = inspect(properties, {depth: 0});
-
-        expect(properties).not.to.be.undefined;
-        expect(properties.pickle).not.to.be.undefined;
-        expect(serializedProperties).not.to.be.undefined;
-        // Must be more than an empty object, cannot test the exact string because
-        // it contains random values in a random order.
-        expect(inspectedProperties).to.have.length.of.at.least(3);
+        expect(properties).to.be.a("string");
+        expect(properties).to.match(UUID_V4_EXPR);
       });
       """
     When I run cypress

@@ -114,48 +114,29 @@ export interface InternalSuiteProperties {
   isEventHandlersAttached?: boolean;
 }
 
-class InternalSpecPropertiesReference {
-  private static referenceMap = new WeakMap<
-    InternalSpecPropertiesReference,
-    InternalSpecProperties
-  >();
+const internalSpecProperties = new Map<string, InternalSpecProperties>();
 
-  private constructor() {
-    // Empty constructor just to set private visibility
-  }
-
-  public static new(
-    scenarioName: string,
-    properties: InternalSpecProperties
-  ): InternalSpecPropertiesReference {
-    const reference = new this();
-
-    this.referenceMap.set(reference, properties);
-
-    return reference;
-  }
-
-  public dereference(): InternalSpecProperties {
-    // Non-null assertion is safe because an instance of reference is only given out after it is included
-    // in the reference map.
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return InternalSpecPropertiesReference.referenceMap.get(this)!;
-  }
-
-  public toJSON(): void {
-    // Noop override to hide the reference from serialization.
-    // Any property pointing to a reference will be ignored by JSON.stringify
-  }
+function createInternalSpecProperties(
+  properties: InternalSpecProperties
+): string {
+  const reference = uuid();
+  internalSpecProperties.set(reference, properties);
+  return reference;
 }
 
 export function retrieveInternalSpecProperties(): InternalSpecProperties {
-  const envValue = Cypress.env(INTERNAL_SPEC_PROPERTIES);
+  const reference = Cypress.env(INTERNAL_SPEC_PROPERTIES) as string;
 
-  if (envValue instanceof InternalSpecPropertiesReference) {
-    return envValue.dereference();
-  }
+  return assertAndReturn(
+    internalSpecProperties.get(reference),
+    `Expected to find internal spec properties with reference = ${reference}`
+  );
+}
 
-  return envValue;
+function updateInternalSpecProperties(
+  newProperties: Partial<InternalSpecProperties>
+): void {
+  Object.assign(retrieveInternalSpecProperties(), newProperties);
 }
 
 function retrieveInternalSuiteProperties():
@@ -361,9 +342,8 @@ function createPickle(
   };
 
   const internalEnv = {
-    [INTERNAL_SPEC_PROPERTIES]: tags.includes("@reportInternalCucumberState")
-      ? internalProperties
-      : InternalSpecPropertiesReference.new(scenarioName, internalProperties),
+    [INTERNAL_SPEC_PROPERTIES]:
+      createInternalSpecProperties(internalProperties),
   };
 
   const suiteOptions = tags
@@ -819,8 +799,10 @@ export default function createTests(
     /**
      * Repopulate internal properties in case previous test is retried.
      */
-    properties.testCaseStartedId = uuid();
-    properties.remainingSteps = [...properties.allSteps];
+    updateInternalSpecProperties({
+      testCaseStartedId: uuid(),
+      remainingSteps: [...properties.allSteps],
+    });
   });
 
   after(function () {

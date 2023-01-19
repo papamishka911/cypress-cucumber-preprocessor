@@ -1,16 +1,19 @@
+import { Pickle } from "@cucumber/messages";
+
 import parse from "@cucumber/tag-expressions";
+
 import { fromByteArray } from "base64-js";
-import { assertAndReturn } from "./assertions";
+
+import { createError } from "./assertions";
+
 import { collectTagNames } from "./ast-helpers";
 
 import {
   INTERNAL_SPEC_PROPERTIES,
   TASK_CREATE_STRING_ATTACHMENT,
 } from "./constants";
-import {
-  InternalSpecProperties,
-  retrieveInternalSpecProperties,
-} from "./create-tests";
+
+import { retrieveInternalSpecProperties } from "./create-tests";
 
 import { runStepWithLogGroup } from "./cypress";
 
@@ -123,10 +126,13 @@ export const NOT_FEATURE_ERROR =
   "Expected to find internal properties, but didn't. This is likely because you're calling doesFeatureMatch() in a non-feature spec. Use doesFeatureMatch() in combination with isFeature() if you have both feature and non-feature specs";
 
 function doesFeatureMatch(expression: string) {
-  const { pickle } = assertAndReturn(
-    retrieveInternalSpecProperties(),
-    NOT_FEATURE_ERROR
-  ) as InternalSpecProperties;
+  let pickle: Pickle;
+
+  try {
+    pickle = retrieveInternalSpecProperties().pickle;
+  } catch {
+    throw createError(NOT_FEATURE_ERROR);
+  }
 
   return parse(expression).evaluate(collectTagNames(pickle.tags));
 }
