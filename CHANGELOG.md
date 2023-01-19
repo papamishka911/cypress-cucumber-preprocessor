@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## v15.1.2
+
+- Limit the size of internal variables contained within the Cypress environment, fixes [#908](https://github.com/badeball/cypress-cucumber-preprocessor/issues/908).
+
 ## v15.1.1
 
 - Log hooks using log groups as well, fixes [#922](https://github.com/badeball/cypress-cucumber-preprocessor/issues/922).
