@@ -145,6 +145,16 @@ function retrieveInternalSuiteProperties():
   return Cypress.env(INTERNAL_SUITE_PROPERTIES);
 }
 
+function flushMessages(messages: CompositionContext["messages"]) {
+  if (messages.enabled) {
+    cy.task(
+      TASK_APPEND_MESSAGES,
+      messages.stack.splice(0, messages.stack.length),
+      { log: false }
+    );
+  }
+}
+
 function findPickleById(context: CompositionContext, astId: string) {
   return assertAndReturn(
     context.pickles.find(
@@ -371,6 +381,8 @@ function createPickle(
         timestamp: createTimestamp(),
       },
     });
+
+    flushMessages(context.messages);
 
     window.testState = {
       gherkinDocument,
@@ -652,22 +664,21 @@ export default function createTests(
       ? parse(environmentTags)
       : noopNode;
 
+  const context: CompositionContext = {
+    registry,
+    gherkinDocument,
+    pickles,
+    testFilter,
+    omitFiltered,
+    messages: {
+      enabled: messagesEnabled,
+      stack: messages,
+    },
+    stepDefinitionHints,
+  };
+
   if (gherkinDocument.feature) {
-    createFeature(
-      {
-        registry,
-        gherkinDocument,
-        pickles,
-        testFilter,
-        omitFiltered,
-        messages: {
-          enabled: messagesEnabled,
-          stack: messages,
-        },
-        stepDefinitionHints,
-      },
-      gherkinDocument.feature
-    );
+    createFeature(context, gherkinDocument.feature);
   }
 
   const isHooksAttached = globalThis[INTERNAL_PROPERTY_NAME];
@@ -806,9 +817,7 @@ export default function createTests(
   });
 
   after(function () {
-    if (messagesEnabled) {
-      cy.task(TASK_APPEND_MESSAGES, messages, { log: false });
-    }
+    flushMessages(context.messages);
   });
 }
 
