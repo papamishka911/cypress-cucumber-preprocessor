@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## v15.1.3
+
+- Ensure attachments are correctly added to HTML reports in case of retries, fixes [#931](https://github.com/badeball/cypress-cucumber-preprocessor/issues/931).
+
 ## v15.1.2
 
 - Limit the size of internal variables contained within the Cypress environment, fixes [#908](https://github.com/badeball/cypress-cucumber-preprocessor/issues/908).
