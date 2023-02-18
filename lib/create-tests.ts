@@ -706,96 +706,126 @@ export default function createTests(
 
     const endTimestamp = createTimestamp();
 
-    if (
-      remainingSteps.length > 0 &&
-      (this.currentTest?.state as unknown) !== "pending"
-    ) {
-      const error = assertAndReturn(
-        this.currentTest?.err?.message,
-        "Expected to find an error message"
-      );
+    if (remainingSteps.length > 0) {
+      if (this.currentTest?.state === "failed") {
+        const error = assertAndReturn(
+          this.currentTest?.err?.message,
+          "Expected to find an error message"
+        );
 
-      if (HOOK_FAILURE_EXPR.test(error)) {
-        return;
-      }
+        if (HOOK_FAILURE_EXPR.test(error)) {
+          return;
+        }
 
-      const failedStep = assertAndReturn(
-        remainingSteps.shift(),
-        "Expected there to be a remaining step"
-      );
+        const failedStep = assertAndReturn(
+          remainingSteps.shift(),
+          "Expected there to be a remaining step"
+        );
 
-      const testStepId = assertAndReturn(
-        failedStep.hook?.id ?? failedStep.pickleStep?.id,
-        "Expected a step to either be a hook or a pickleStep"
-      );
-
-      const failedTestStepFinished: messages.Envelope = error.includes(
-        "Step implementation missing"
-      )
-        ? {
-            testStepFinished: {
-              testStepId,
-              testCaseStartedId,
-              testStepResult: {
-                status:
-                  Status.Undefined as unknown as messages.TestStepResultStatus,
-                duration: {
-                  seconds: 0,
-                  nanos: 0,
-                },
-              },
-              timestamp: endTimestamp,
-            },
-          }
-        : {
-            testStepFinished: {
-              testStepId,
-              testCaseStartedId,
-              testStepResult: {
-                status:
-                  Status.Failed as unknown as messages.TestStepResultStatus,
-                message: this.currentTest?.err?.message,
-                // TODO: Create a proper duration from when the step started.
-                duration: {
-                  seconds: 0,
-                  nanos: 0,
-                },
-              },
-              timestamp: endTimestamp,
-            },
-          };
-
-      messages.push(failedTestStepFinished);
-
-      for (const skippedStep of remainingSteps) {
         const testStepId = assertAndReturn(
-          skippedStep.hook?.id ?? skippedStep.pickleStep?.id,
+          failedStep.hook?.id ?? failedStep.pickleStep?.id,
           "Expected a step to either be a hook or a pickleStep"
         );
 
-        messages.push({
-          testStepStarted: {
-            testStepId,
-            testCaseStartedId,
-            timestamp: endTimestamp,
-          },
-        });
-
-        messages.push({
-          testStepFinished: {
-            testStepId,
-            testCaseStartedId,
-            testStepResult: {
-              status:
-                Status.Skipped as unknown as messages.TestStepResultStatus,
-              duration: {
-                seconds: 0,
-                nanos: 0,
+        const failedTestStepFinished: messages.Envelope = error.includes(
+          "Step implementation missing"
+        )
+          ? {
+              testStepFinished: {
+                testStepId,
+                testCaseStartedId,
+                testStepResult: {
+                  status:
+                    Status.Undefined as unknown as messages.TestStepResultStatus,
+                  duration: {
+                    seconds: 0,
+                    nanos: 0,
+                  },
+                },
+                timestamp: endTimestamp,
               },
+            }
+          : {
+              testStepFinished: {
+                testStepId,
+                testCaseStartedId,
+                testStepResult: {
+                  status:
+                    Status.Failed as unknown as messages.TestStepResultStatus,
+                  message: this.currentTest?.err?.message,
+                  // TODO: Create a proper duration from when the step started.
+                  duration: {
+                    seconds: 0,
+                    nanos: 0,
+                  },
+                },
+                timestamp: endTimestamp,
+              },
+            };
+
+        messages.push(failedTestStepFinished);
+
+        for (const skippedStep of remainingSteps) {
+          const testStepId = assertAndReturn(
+            skippedStep.hook?.id ?? skippedStep.pickleStep?.id,
+            "Expected a step to either be a hook or a pickleStep"
+          );
+
+          messages.push({
+            testStepStarted: {
+              testStepId,
+              testCaseStartedId,
+              timestamp: endTimestamp,
             },
-            timestamp: endTimestamp,
-          },
-        });
+          });
+
+          messages.push({
+            testStepFinished: {
+              testStepId,
+              testCaseStartedId,
+              testStepResult: {
+                status:
+                  Status.Skipped as unknown as messages.TestStepResultStatus,
+                duration: {
+                  seconds: 0,
+                  nanos: 0,
+                },
+              },
+              timestamp: endTimestamp,
+            },
+          });
+        }
+      } else {
+        for (const skippedStep of remainingSteps) {
+          const testStepId = assertAndReturn(
+            skippedStep.hook?.id ?? skippedStep.pickleStep?.id,
+            "Expected a step to either be a hook or a pickleStep"
+          );
+
+          messages.push({
+            testStepStarted: {
+              testStepId,
+              testCaseStartedId,
+              timestamp: endTimestamp,
+            },
+          });
+
+          messages.push({
+            testStepFinished: {
+              testStepId,
+              testCaseStartedId,
+              testStepResult: {
+                status:
+                  Status.Unknown as unknown as messages.TestStepResultStatus,
+                duration: {
+                  seconds: 0,
+                  nanos: 0,
+                },
+              },
+              timestamp: endTimestamp,
+            },
+          });
+        }
       }
     }
 

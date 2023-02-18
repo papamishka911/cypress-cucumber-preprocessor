@@ -226,6 +226,35 @@ Feature: JSON formatter
     And there should be a JSON output similar to "fixtures/retried.json"
     # And there should be a JSON output similar to "fixtures/passed-example.json"
 
+  Scenario: rescued error
+    Given a file named "cypress/e2e/a.feature" with:
+      """
+      Feature: a feature
+        Scenario: a scenario
+          Given a failing step
+          And an unimplemented step
+      """
+    And a file named "cypress/support/step_definitions/steps.js" with:
+      """
+      const { Given } = require("@badeball/cypress-cucumber-preprocessor");
+      Given("a failing step", function() {
+        throw new Error("foobar")
+      })
+      """
+    And a file named "cypress/support/e2e.js" with:
+      """
+      Cypress.on("fail", (err) => {
+        if (err.message.includes("foobar")) {
+          return;
+        }
+
+        throw err;
+      })
+      """
+    When I run cypress
+    Then it passes
+    And there should be a JSON output similar to "fixtures/rescued-error.json"
+
   Scenario: failing Before hook
     Given additional Cypress configuration
       """
