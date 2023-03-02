@@ -38,10 +38,10 @@ Let's consider the following directory structure.
 /home/john.doe/my-project
 └── cypress
     └── e2e
-        ├── bar
+        ├── foo
         │   ├── a.feature
         │   └── a.js
-        └── foo
+        └── bar
             ├── b.feature
             └── b.js
 ```
