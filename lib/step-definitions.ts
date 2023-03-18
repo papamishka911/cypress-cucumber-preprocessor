@@ -1,6 +1,6 @@
 import path from "path";
 
-import glob from "glob";
+import { glob } from "glob";
 
 import util from "util";
 
@@ -26,7 +26,7 @@ export async function getStepDefinitionPaths(
   return (
     await Promise.all(
       stepDefinitionPatterns.map((pattern) =>
-        util.promisify(glob)(pattern, { nodir: true })
+        glob(pattern, { nodir: true, windowsPathsNoEscape: true })
       )
     )
   ).reduce((acum, el) => acum.concat(el), []);
