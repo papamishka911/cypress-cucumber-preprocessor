@@ -1,6 +1,6 @@
 import path from "path";
 
-import { glob } from "glob";
+import glob from "glob";
 
 import util from "util";
 
@@ -26,7 +26,7 @@ export async function getStepDefinitionPaths(
   return (
     await Promise.all(
       stepDefinitionPatterns.map((pattern) =>
-        glob(pattern, { nodir: true, windowsPathsNoEscape: true })
+        glob.glob(pattern, { nodir: true, windowsPathsNoEscape: true })
       )
     )
   ).reduce((acum, el) => acum.concat(el), []);
@@ -82,11 +82,14 @@ export function getStepDefinitionPatternsPost10(
     throw new Error(`${filepath} is not inside ${projectRoot}`);
   }
 
-  const filepathReplacement = trimFeatureExtension(
-    path.relative(
-      configuration.preprocessor.implicitIntegrationFolder,
-      filepath
-    )
+  const filepathReplacement = glob.escape(
+    trimFeatureExtension(
+      path.relative(
+        configuration.preprocessor.implicitIntegrationFolder,
+        filepath
+      )
+    ),
+    { windowsPathsNoEscape: true }
   );
 
   debug(`replacing [filepath] with ${util.inspect(filepathReplacement)}`);
@@ -138,8 +141,9 @@ export function getStepDefinitionPatternsPre10(
     throw new Error(`${filepath} is not inside ${fullIntegrationFolder}`);
   }
 
-  const filepathReplacement = trimFeatureExtension(
-    path.relative(fullIntegrationFolder, filepath)
+  const filepathReplacement = glob.escape(
+    trimFeatureExtension(path.relative(fullIntegrationFolder, filepath)),
+    { windowsPathsNoEscape: true }
   );
 
   debug(`replacing [filepath] with ${util.inspect(filepathReplacement)}`);
