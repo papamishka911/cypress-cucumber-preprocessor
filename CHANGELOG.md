@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## v15.1.5
+
+- Correctly escape injected values to glob patterns, fixes [#946](https://github.com/badeball/cypress-cucumber-preprocessor/issues/946).
+
 ## v15.1.4
 
 - Handle rescued test errors without self erroring, fixes [#856](https://github.com/badeball/cypress-cucumber-preprocessor/issues/856).
