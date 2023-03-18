@@ -58,4 +58,4 @@ See answer above.
 
 ## Function members `And(..)` and `But(..)` are missing
 
-These have been [deprecated](https://github.com/badeball/cypress-cucumber-preprocessor/issues/821).
+These have been [deprecated](https://github.com/badeball/cypress-cucumber-preprocessor/issues/821). Bear in mind, the `And` keyword can still be used in `.feature` files.
