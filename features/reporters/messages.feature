@@ -1,15 +1,14 @@
-Feature: JSON formatter
+Feature: messages report
 
   Background:
     Given additional preprocessor configuration
       """
       {
-        "json": {
+        "messages": {
           "enabled": true
         }
       }
       """
-    And I've ensured cucumber-json-formatter is installed
 
   Scenario: passed example
     Given a file named "cypress/e2e/a.feature" with:
@@ -25,7 +24,7 @@ Feature: JSON formatter
       """
     When I run cypress
     Then it passes
-    And there should be a JSON output similar to "fixtures/passed-example.json"
+    And there should be a messages similar to "fixtures/passed-example.ndjson"
 
   Scenario: passed outline
     Given a file named "cypress/e2e/a.feature" with:
@@ -45,7 +44,7 @@ Feature: JSON formatter
       """
     When I run cypress
     Then it passes
-    And there should be a JSON output similar to "fixtures/passed-outline.json"
+    And there should be a messages similar to "fixtures/passed-outline.ndjson"
 
   Scenario: multiple features
     Given a file named "cypress/e2e/a.feature" with:
@@ -67,7 +66,7 @@ Feature: JSON formatter
       """
     When I run cypress
     Then it passes
-    And there should be a JSON output similar to "fixtures/multiple-features.json"
+    And there should be a messages similar to "fixtures/multiple-features.ndjson"
 
   Scenario: failing step
     Given additional Cypress configuration
@@ -93,7 +92,7 @@ Feature: JSON formatter
       """
     When I run cypress
     Then it fails
-    And there should be a JSON output similar to "fixtures/failing-step.json"
+    And there should be a messages similar to "fixtures/failing-step.ndjson"
 
   Scenario: undefined step
     Given additional Cypress configuration
@@ -116,7 +115,7 @@ Feature: JSON formatter
       """
     When I run cypress
     Then it fails
-    And there should be a JSON output similar to "fixtures/undefined-steps.json"
+    And there should be a messages similar to "fixtures/undefined-steps.ndjson"
 
   Scenario: pending step
     Given additional Cypress configuration
@@ -146,7 +145,7 @@ Feature: JSON formatter
       """
     When I run cypress
     Then it passes
-    And there should be a JSON output similar to "fixtures/pending-steps.json"
+    And there should be a messages similar to "fixtures/pending-steps.ndjson"
 
   Scenario: explicit screenshot
     Given a file named "cypress/e2e/a.feature" with:
@@ -177,7 +176,7 @@ Feature: JSON formatter
       """
     When I run cypress
     Then it passes
-    And there should be a JSON output similar to "fixtures/attachments/screenshot.json"
+    And there should be a messages similar to "fixtures/attachments/screenshot.ndjson"
 
   Scenario: screenshot of failed test
     Given a file named "cypress/e2e/a.feature" with:
@@ -195,7 +194,7 @@ Feature: JSON formatter
       """
     When I run cypress
     Then it fails
-    And the JSON report should contain an image attachment for what appears to be a screenshot
+    And the messages report should contain an image attachment for what appears to be a screenshot
 
   Scenario: retried
     Given additional Cypress configuration
@@ -223,8 +222,8 @@ Feature: JSON formatter
       """
     When I run cypress
     Then it passes
-    And there should be a JSON output similar to "fixtures/retried.json"
-    # And there should be a JSON output similar to "fixtures/passed-example.json"
+    And there should be a messages similar to "fixtures/retried.ndjson"
+    # And there should be a messages similar to "fixtures/passed-example.ndjson"
 
   Scenario: rescued error
     Given a file named "cypress/e2e/a.feature" with:
@@ -253,7 +252,7 @@ Feature: JSON formatter
       """
     When I run cypress
     Then it passes
-    And there should be a JSON output similar to "fixtures/rescued-error.json"
+    And there should be a messages similar to "fixtures/rescued-error.ndjson"
 
   Scenario: failing Before hook
     Given additional Cypress configuration
@@ -278,7 +277,7 @@ Feature: JSON formatter
       """
     When I run cypress
     Then it fails
-    And there should be a JSON output similar to "fixtures/failing-before.json"
+    And there should be a messages similar to "fixtures/failing-before.ndjson"
 
   Scenario: failing After hook
     Given additional Cypress configuration
@@ -303,7 +302,7 @@ Feature: JSON formatter
       """
     When I run cypress
     Then it fails
-    And there should be a JSON output similar to "fixtures/failing-after.json"
+    And there should be a messages similar to "fixtures/failing-after.ndjson"
 
   Scenario: failing before hook
     Given a file named "cypress/e2e/a.feature" with:
@@ -329,7 +328,7 @@ Feature: JSON formatter
       """
       Hook failures can't be represented in messages / JSON reports, thus none is created for cypress/e2e/a.feature.
       """
-    And the JSON report shouldn't contain any specs
+    And the messages report shouldn't contain any specs
 
   Scenario: failing beforeEach hook
     Given a file named "cypress/e2e/a.feature" with:
@@ -355,7 +354,7 @@ Feature: JSON formatter
       """
       Hook failures can't be represented in messages / JSON reports, thus none is created for cypress/e2e/a.feature.
       """
-    And the JSON report shouldn't contain any specs
+    And the messages report shouldn't contain any specs
 
   Scenario: failing afterEach hook
     Given a file named "cypress/e2e/a.feature" with:
@@ -381,7 +380,7 @@ Feature: JSON formatter
       """
       Hook failures can't be represented in messages / JSON reports, thus none is created for cypress/e2e/a.feature.
       """
-    And the JSON report shouldn't contain any specs
+    And the messages report shouldn't contain any specs
 
   Scenario: failing after hook
     Given a file named "cypress/e2e/a.feature" with:
@@ -407,4 +406,4 @@ Feature: JSON formatter
       """
       Hook failures can't be represented in messages / JSON reports, thus none is created for cypress/e2e/a.feature.
       """
-    And the JSON report shouldn't contain any specs
+    And the messages report shouldn't contain any specs
