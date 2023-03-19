@@ -1,4 +1,4 @@
-import messages from "@cucumber/messages";
+import messages, { TestStepResultStatus } from "@cucumber/messages";
 
 import parse from "@cucumber/tag-expressions";
 
@@ -78,19 +78,6 @@ interface CompositionContext {
     stepDefinitionPaths: string[];
   };
 }
-
-/**
- * From messages.TestStepFinished.TestStepResult.Status.
- */
-const Status = {
-  Unknown: "UNKNOWN" as unknown as 0,
-  Passed: "PASSED" as unknown as 1,
-  Skipped: "SKIPPED" as unknown as 2,
-  Pending: "PENDING" as unknown as 3,
-  Undefined: "UNDEFINED" as unknown as 4,
-  Ambiguous: "AMBIGUOUS" as unknown as 5,
-  Failed: "FAILED" as unknown as 6,
-};
 
 const sourceReference: messages.SourceReference = {
   uri: "not available",
@@ -429,8 +416,7 @@ function createPickle(
                 testStepId: hook.id,
                 testCaseStartedId,
                 testStepResult: {
-                  status:
-                    Status.Passed as unknown as messages.TestStepResultStatus,
+                  status: TestStepResultStatus.PASSED,
                   duration: duration(start, end),
                 },
                 timestamp: end,
@@ -523,8 +509,7 @@ function createPickle(
                   testStepId: pickleStep.id,
                   testCaseStartedId,
                   testStepResult: {
-                    status:
-                      Status.Pending as unknown as messages.TestStepResultStatus,
+                    status: TestStepResultStatus.PENDING,
                     duration: duration(start, end),
                   },
                   timestamp: end,
@@ -552,8 +537,7 @@ function createPickle(
                     testStepId,
                     testCaseStartedId,
                     testStepResult: {
-                      status:
-                        Status.Skipped as unknown as messages.TestStepResultStatus,
+                      status: TestStepResultStatus.SKIPPED,
                       duration: {
                         seconds: 0,
                         nanos: 0,
@@ -575,8 +559,7 @@ function createPickle(
                   testStepId: pickleStep.id,
                   testCaseStartedId,
                   testStepResult: {
-                    status:
-                      Status.Passed as unknown as messages.TestStepResultStatus,
+                    status: TestStepResultStatus.PASSED,
                     duration: duration(start, end),
                   },
                   timestamp: end,
@@ -735,8 +718,7 @@ export default function createTests(
                 testStepId,
                 testCaseStartedId,
                 testStepResult: {
-                  status:
-                    Status.Undefined as unknown as messages.TestStepResultStatus,
+                  status: TestStepResultStatus.UNDEFINED,
                   duration: {
                     seconds: 0,
                     nanos: 0,
@@ -750,8 +732,7 @@ export default function createTests(
                 testStepId,
                 testCaseStartedId,
                 testStepResult: {
-                  status:
-                    Status.Failed as unknown as messages.TestStepResultStatus,
+                  status: TestStepResultStatus.FAILED,
                   message: this.currentTest?.err?.message,
                   // TODO: Create a proper duration from when the step started.
                   duration: {
@@ -784,8 +765,7 @@ export default function createTests(
               testStepId,
               testCaseStartedId,
               testStepResult: {
-                status:
-                  Status.Skipped as unknown as messages.TestStepResultStatus,
+                status: TestStepResultStatus.SKIPPED,
                 duration: {
                   seconds: 0,
                   nanos: 0,
@@ -815,8 +795,7 @@ export default function createTests(
               testStepId,
               testCaseStartedId,
               testStepResult: {
-                status:
-                  Status.Unknown as unknown as messages.TestStepResultStatus,
+                status: TestStepResultStatus.UNKNOWN,
                 duration: {
                   seconds: 0,
                   nanos: 0,
