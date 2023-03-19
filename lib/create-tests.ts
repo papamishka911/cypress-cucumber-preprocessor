@@ -808,11 +808,21 @@ export default function createTests(
       }
     }
 
+    const currentRetry = assertAndReturn(
+      (this.currentTest as any)?._currentRetry,
+      "Expected to find an attribute _currentRetry"
+    );
+
+    const retries = assertAndReturn(
+      (this.currentTest as any)?._retries,
+      "Expected to find an attribute _retries"
+    );
+
     messages.push({
       testCaseFinished: {
         testCaseStartedId,
         timestamp: endTimestamp,
-        willBeRetried: false,
+        willBeRetried: currentRetry < retries,
       },
     });
 

@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+- Correctly set `willBeRetried` in messages reports, fixes [#849](https://github.com/badeball/cypress-cucumber-preprocessor/issues/849).
+
 ## v15.1.5
 
 - Correctly escape injected values to glob patterns, fixes [#946](https://github.com/badeball/cypress-cucumber-preprocessor/issues/946).
