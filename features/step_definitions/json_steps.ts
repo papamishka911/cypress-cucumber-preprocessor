@@ -146,22 +146,10 @@ Then(
       );
     });
 
-    let expectedDimensions: { width: number; height: number };
-
-    /**
-     * See https://github.com/cypress-io/cypress/pull/15686 and https://github.com/cypress-io/cypress/pull/17309.
-     */
-    if (cypressVersion.startsWith("7.")) {
-      expectedDimensions = {
-        width: 1920,
-        height: 1080,
-      };
-    } else {
-      expectedDimensions = {
-        width: 1280,
-        height: 720,
-      };
-    }
+    const expectedDimensions = {
+      width: 1280,
+      height: 720,
+    };
 
     const { width: actualWidth, height: actualHeight } = png;
 
