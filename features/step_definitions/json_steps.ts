@@ -3,7 +3,6 @@ import path from "path";
 import { promises as fs } from "fs";
 import assert from "assert";
 import child_process from "child_process";
-import { toByteArray } from "base64-js";
 import { PNG } from "pngjs";
 import { version as cypressVersion } from "cypress/package.json";
 
@@ -136,7 +135,7 @@ Then(
 
     const png = await new Promise<PNG>((resolve, reject) => {
       new PNG().parse(
-        Buffer.from(toByteArray(embedding.data)),
+        Buffer.from(embedding.data, "base64"),
         function (error, data) {
           if (error) {
             reject(error);
