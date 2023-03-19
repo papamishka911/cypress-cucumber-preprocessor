@@ -2,13 +2,15 @@ import syncFs, { promises as fs, constants as fsConstants } from "fs";
 
 import path from "path";
 
-import child_process from "child_process";
-
 import stream from "stream";
+
+import { EventEmitter } from "events";
 
 import chalk from "chalk";
 
 import resolvePkg from "resolve-pkg";
+
+import { formatterHelpers, JsonFormatter } from "@cucumber/cucumber";
 
 import { NdjsonToMessageStream } from "@cucumber/message-streams";
 
@@ -31,6 +33,7 @@ import {
   INTERNAL_SUITE_PROPERTIES,
   TASK_APPEND_MESSAGES,
   TASK_CREATE_STRING_ATTACHMENT,
+  TASK_TEST_CASE_STARTED,
   TASK_TEST_STEP_STARTED,
 } from "./constants";
 
@@ -70,8 +73,13 @@ function memoize<T extends (...args: any[]) => any>(
   };
 }
 
+function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
+  return value !== null && value !== undefined;
+}
+
 const resolve = memoize(origResolve);
 
+let currentTestCaseStartedId: string;
 let currentTestStepStartedId: string;
 let currentSpecMessages: messages.Envelope[];
 
@@ -146,38 +154,67 @@ export async function afterRunHandler(config: Cypress.PluginConfigOptions) {
 
     await fs.mkdir(path.dirname(jsonPath), { recursive: true });
 
-    const messages = await fs.open(messagesPath, "r");
+    const messages = (await fs.readFile(messagesPath))
+      .toString()
+      .trim()
+      .split("\n")
+      .map((line) => JSON.parse(line));
 
-    try {
-      const json = await fs.open(jsonPath, "w");
+    let jsonOutput: string | undefined;
 
-      try {
-        const { formatter, args } = preprocessor.json;
-        const child = child_process.spawn(formatter, args, {
-          stdio: [messages.fd, json.fd, "inherit"],
-        });
-
-        await new Promise<void>((resolve, reject) => {
-          child.on("exit", (code) => {
-            if (code === 0) {
-              resolve();
-            } else {
-              reject(
-                new Error(
-                  `${preprocessor.json.formatter} exited non-successfully`
-                )
-              );
-            }
-          });
-
-          child.on("error", reject);
-        });
-      } finally {
-        await json.close();
+    const log = (output: string | Uint8Array) => {
+      if (typeof output !== "string") {
+        throw new Error(
+          "Expected a JSON output of string, but got " + typeof output
+        );
+      } else {
+        jsonOutput = output;
       }
-    } finally {
-      await messages.close();
+    };
+
+    const eventBroadcaster = new EventEmitter();
+
+    const eventDataCollector = new formatterHelpers.EventDataCollector(
+      eventBroadcaster
+    );
+
+    const stepDefinitions = messages
+      .map((m) => m.stepDefinition)
+      .filter(notEmpty)
+      .map((s) => {
+        return {
+          id: s.id,
+          uri: "not available",
+          line: 0,
+        };
+      });
+
+    new JsonFormatter({
+      eventBroadcaster,
+      eventDataCollector,
+      log,
+      supportCodeLibrary: {
+        stepDefinitions,
+      } as any,
+      colorFns: null as any,
+      cwd: null as any,
+      parsedArgvOptions: {},
+      snippetBuilder: null as any,
+      stream: null as any,
+      cleanup: null as any,
+    });
+
+    for (const message of messages) {
+      eventBroadcaster.emit("envelope", message);
     }
+
+    if (typeof jsonOutput !== "string") {
+      throw new Error(
+        "Expected JSON formatter to have finished, but it never returned"
+      );
+    }
+
+    await fs.writeFile(jsonPath, jsonOutput);
   }
 
   if (preprocessor.html.enabled) {
@@ -278,6 +315,7 @@ export async function afterScreenshotHandler(
 
   const message: messages.Envelope = {
     attachment: {
+      testCaseStartedId: currentTestCaseStartedId,
       testStepId: currentTestStepStartedId,
       body: buffer.toString("base64"),
       mediaType: "image/png",
@@ -366,6 +404,16 @@ export default async function addCucumberPreprocessorPlugin(
       return true;
     },
 
+    [TASK_TEST_CASE_STARTED]: (testCaseStartedId) => {
+      if (!currentSpecMessages) {
+        return true;
+      }
+
+      currentTestCaseStartedId = testCaseStartedId;
+
+      return true;
+    },
+
     [TASK_TEST_STEP_STARTED]: (testStepStartedId) => {
       if (!currentSpecMessages) {
         return true;
@@ -383,6 +431,7 @@ export default async function addCucumberPreprocessorPlugin(
 
       const message: messages.Envelope = {
         attachment: {
+          testCaseStartedId: currentTestCaseStartedId,
           testStepId: currentTestStepStartedId,
           body: data,
           mediaType: mediaType,

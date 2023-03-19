@@ -2,7 +2,6 @@
 
 * [`--env` / `tags` isn't picked up](#--env--tags-isnt-picked-up)
 * [I get `fs_1.promises.rm is not a function`](#i-get-fs_1promisesrm-is-not-a-function)
-* [I get `spawn cucumber-json-formatter ENOENT`](#i-get-spawn-cucumber-json-formatter-enoent)
 * [Why is `cypress-tags` missing?](#why-is-cypress-tags-missing)
 * [My JSON report isn't generated](#my-json-report-isnt-generated)
 * [JSON reports aren't generated in open / interactive mode](#json-reports-arent-generated-in-open--interactive-mode)
@@ -17,10 +16,6 @@ This might be because you're trying to specify `-e / --env` multiple times, but 
 ## I get `fs_1.promises.rm is not a function`
 
 Upgrade your node version to at least [v14.14.0](https://nodejs.org/api/fs.html#fspromisesrmpath-options).
-
-## I get `spawn cucumber-json-formatter ENOENT`
-
-You need to install `cucumber-json-formatter` **yourself**, as per [documentation](json-report.md).
 
 ## Why is `cypress-tags` missing?
 

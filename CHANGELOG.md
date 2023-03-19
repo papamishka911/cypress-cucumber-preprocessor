@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 
 - Correctly set `willBeRetried` in messages reports, fixes [#849](https://github.com/badeball/cypress-cucumber-preprocessor/issues/849).
 
+- Replace [cucumber-json-formatter](https://github.com/cucumber/json-formatter) with native components, relates to [#795](https://github.com/badeball/cypress-cucumber-preprocessor/issues/795), [#827](https://github.com/badeball/cypress-cucumber-preprocessor/issues/827), [#870](https://github.com/badeball/cypress-cucumber-preprocessor/issues/870), [#966](https://github.com/badeball/cypress-cucumber-preprocessor/issues/966) and [#967](https://github.com/badeball/cypress-cucumber-preprocessor/issues/967).
+
 ## v15.1.5
 
 - Correctly escape injected values to glob patterns, fixes [#946](https://github.com/badeball/cypress-cucumber-preprocessor/issues/946).

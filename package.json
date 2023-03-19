@@ -47,6 +47,7 @@
   },
   "dependencies": {
     "@badeball/cypress-configuration": "^4.0.0",
+    "@cucumber/cucumber": "^8.11.1",
     "@cucumber/cucumber-expressions": "^16.0.0",
     "@cucumber/gherkin": "^24.0.0",
     "@cucumber/html-formatter": "^19.2.0",
@@ -73,7 +74,6 @@
     "@babel/parser": "^7.20.7",
     "@babel/types": "^7.20.7",
     "@bahmutov/cypress-esbuild-preprocessor": "^2.2.0",
-    "@cucumber/cucumber": "^8.0.0",
     "@cucumber/pretty-formatter": "^1.0.0-alpha.0",
     "@cypress/browserify-preprocessor": "^3.0.2",
     "@cypress/webpack-preprocessor": "^5.11.1",

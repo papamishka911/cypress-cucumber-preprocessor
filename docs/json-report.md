@@ -10,10 +10,6 @@ JSON reports can be enabled using the `json.enabled` property. The preprocessor 
 }
 ```
 
-This **requires** you to have downloaded and installed the [cucumber-json-formatter](https://github.com/cucumber/json-formatter) **yourself**. Arch Linux users can install it from [AUR](https://aur.archlinux.org/packages/cucumber-json-formatter).
-
-The location of the executable is configurable through the `json.formatter` property, but it will by default search for `cucumber-json-formatter` in your `PATH`.
-
 The report is outputted to `cucumber-report.json` in the project directory, but can be configured through the `json.output` property.
 
 ## Screenshots
@@ -61,13 +57,3 @@ Given("a step", function() {
   attach("Zm9vYmFy", "base64:text/plain");
 });
 ```
-
-## Known issues
-
-Some issues with `cucumber-json-formatter` are known and don't need to be reported again.
-
-- Inaccurate output of `match` on undefined step definition (https://github.com/cucumber/json-formatter/issues/2)
-
-- Inaccurate output of retried scenarios (https://github.com/cucumber/json-formatter/issues/4)
-
-- Inaccurate output of scenario outlined with parameterized name (https://github.com/cucumber/json-formatter/issues/25)

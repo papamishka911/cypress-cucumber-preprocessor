@@ -71,18 +71,6 @@ function validateConfigurationEntry(
           `Expected an object (json), but got ${util.inspect(value)}`
         );
       }
-      let args: string[] | undefined;
-      if (hasOwnProperty(value, "args")) {
-        if (Array.isArray(value.args) && value.args.every(isString)) {
-          args = value.args;
-        } else {
-          throw new Error(
-            `Expected an array of strings (json.args), but got ${util.inspect(
-              value
-            )}`
-          );
-        }
-      }
       if (
         !hasOwnProperty(value, "enabled") ||
         typeof value.enabled !== "boolean"
@@ -90,16 +78,6 @@ function validateConfigurationEntry(
         throw new Error(
           `Expected a boolean (json.enabled), but got ${util.inspect(value)}`
         );
-      }
-      let formatter: string | undefined;
-      if (hasOwnProperty(value, "formatter")) {
-        if (isString(value.formatter)) {
-          formatter = value.formatter;
-        } else {
-          throw new Error(
-            `Expected a string (json.formatter), but got ${util.inspect(value)}`
-          );
-        }
       }
       let output: string | undefined;
       if (hasOwnProperty(value, "output")) {
@@ -112,9 +90,7 @@ function validateConfigurationEntry(
         }
       }
       const messagesConfig = {
-        args,
         enabled: value.enabled,
-        formatter,
         output,
       };
       return { [key]: messagesConfig };
@@ -219,20 +195,6 @@ function validateEnvironmentOverrides(
     }
   }
 
-  if (hasOwnProperty(environment, "jsonArgs")) {
-    const { jsonArgs } = environment;
-    if (isString(jsonArgs)) {
-      overrides.jsonArgs = [jsonArgs];
-    }
-    if (Array.isArray(jsonArgs) && jsonArgs.every(isString)) {
-      overrides.jsonArgs = jsonArgs;
-    } else {
-      throw new Error(
-        `Expected a string array (jsonArgs), but got ${util.inspect(jsonArgs)}`
-      );
-    }
-  }
-
   if (hasOwnProperty(environment, "jsonEnabled")) {
     const { jsonEnabled } = environment;
 
@@ -243,20 +205,6 @@ function validateEnvironmentOverrides(
     } else {
       throw new Error(
         `Expected a boolean (jsonEnabled), but got ${util.inspect(jsonEnabled)}`
-      );
-    }
-  }
-
-  if (hasOwnProperty(environment, "jsonFormatter")) {
-    const { jsonFormatter } = environment;
-
-    if (isString(jsonFormatter)) {
-      overrides.jsonFormatter = jsonFormatter;
-    } else {
-      throw new Error(
-        `Expected a string (jsonFormatter), but got ${util.inspect(
-          jsonFormatter
-        )}`
       );
     }
   }
@@ -353,9 +301,7 @@ export interface IPreprocessorConfiguration {
     output?: string;
   };
   readonly json?: {
-    args?: string[];
     enabled: boolean;
-    formatter?: string;
     output?: string;
   };
   readonly html?: {
@@ -371,9 +317,7 @@ export interface IEnvironmentOverrides {
   stepDefinitions?: string | string[];
   messagesEnabled?: boolean;
   messagesOutput?: string;
-  jsonArgs?: string[];
   jsonEnabled?: boolean;
-  jsonFormatter?: string;
   jsonOutput?: string;
   htmlEnabled?: boolean;
   htmlOutput?: string;
@@ -436,18 +380,10 @@ export class PreprocessorConfiguration implements IPreprocessorConfiguration {
 
   get json() {
     return {
-      args:
-        this.environmentOverrides.jsonArgs ??
-        this.explicitValues.json?.args ??
-        [],
       enabled:
         this.environmentOverrides.jsonEnabled ??
         this.explicitValues.json?.enabled ??
         false,
-      formatter:
-        this.environmentOverrides.jsonFormatter ??
-        this.explicitValues.json?.formatter ??
-        "cucumber-json-formatter",
       output:
         this.environmentOverrides.jsonOutput ??
         (this.explicitValues.json?.output || "cucumber-report.json"),

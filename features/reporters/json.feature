@@ -9,7 +9,6 @@ Feature: JSON formatter
         }
       }
       """
-    And I've ensured cucumber-json-formatter is installed
 
   Scenario: passed example
     Given a file named "cypress/e2e/a.feature" with:
@@ -223,8 +222,7 @@ Feature: JSON formatter
       """
     When I run cypress
     Then it passes
-    And there should be a JSON output similar to "fixtures/retried.json"
-    # And there should be a JSON output similar to "fixtures/passed-example.json"
+    And there should be a JSON output similar to "fixtures/passed-example.json"
 
   Scenario: rescued error
     Given a file named "cypress/e2e/a.feature" with:

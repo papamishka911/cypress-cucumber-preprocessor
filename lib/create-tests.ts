@@ -33,6 +33,7 @@ import {
   INTERNAL_SPEC_PROPERTIES,
   INTERNAL_SUITE_PROPERTIES,
   TASK_APPEND_MESSAGES,
+  TASK_TEST_CASE_STARTED,
   TASK_TEST_STEP_STARTED,
 } from "./constants";
 
@@ -272,6 +273,7 @@ function createPickle(
     ...afterHooks.map((hook) => ({ hook })),
   ];
 
+  // TODO: Why am I doing this? For example, an undefined step should not resolve to a step definition with location "not available:0".
   for (const id of definitionIds) {
     messages.stack.push({
       stepDefinition: {
@@ -368,6 +370,10 @@ function createPickle(
         timestamp: createTimestamp(),
       },
     });
+
+    if (messages.enabled) {
+      cy.task(TASK_TEST_CASE_STARTED, testCaseStartedId, { log: false });
+    }
 
     flushMessages(context.messages);
 

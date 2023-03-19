@@ -1,8 +1,7 @@
-import { Given, Then } from "@cucumber/cucumber";
+import { Then } from "@cucumber/cucumber";
 import path from "path";
 import { promises as fs } from "fs";
 import assert from "assert";
-import child_process from "child_process";
 import { PNG } from "pngjs";
 import { version as cypressVersion } from "cypress/package.json";
 
@@ -43,22 +42,6 @@ function prepareJsonReport(tree: any) {
 
   return tree;
 }
-
-Given("I've ensured cucumber-json-formatter is installed", async () => {
-  const child = child_process.spawn("which", ["cucumber-json-formatter"], {
-    stdio: "ignore",
-  });
-
-  await new Promise<void>((resolve, reject) => {
-    child.on("exit", (code) => {
-      if (code === 0) {
-        resolve();
-      } else {
-        reject(new Error("cucumber-json-formatter must be installed"));
-      }
-    });
-  });
-});
 
 Then("there should be no JSON output", async function () {
   await assert.rejects(
