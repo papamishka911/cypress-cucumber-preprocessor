@@ -35,3 +35,5 @@ beforeEach(() => {
   }
 })
 ```
+
+:warning: You can however **not** invoke any other member from `@badeball/cypress-cucumber-preprocessor` (such as `Before(..)` or `Given(..)`) within non-Cucumber specs.
