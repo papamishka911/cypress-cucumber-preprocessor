@@ -46,31 +46,31 @@ export default defineConfig({
 
       on("before:run", async (details) => {
         await beforeRunHandler(config);
-    
+
         // Your own `before:run` code goes here.
       });
-    
+
       on("after:run", async (results) => {
         await afterRunHandler(config);
-    
+
         // Your own `after:run` code goes here.
       });
-    
+
       on("before:spec", async (spec) => {
         await beforeSpecHandler(config);
-    
+
         // Your own `before:spec` code goes here.
       });
-    
+
       on("after:spec", async (spec, results) => {
         await afterSpecHandler(config, spec, results);
-    
+
         // Your own `after:spec` code goes here.
       });
-    
+
       on("after:screenshot", async (details) => {
         await afterScreenshotHandler(config, details);
-    
+
         // Your own `after:screenshot` code goes here.
       });
 
