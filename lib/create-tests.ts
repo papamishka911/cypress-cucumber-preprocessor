@@ -102,18 +102,19 @@ export interface InternalSuiteProperties {
   isEventHandlersAttached?: boolean;
 }
 
-const internalSpecProperties = new Map<string, InternalSpecProperties>();
+let specId = 0;
+
+const internalSpecProperties = new Map<number, InternalSpecProperties>();
 
 function createInternalSpecProperties(
   properties: InternalSpecProperties
-): string {
-  const reference = uuid();
-  internalSpecProperties.set(reference, properties);
-  return reference;
+): number {
+  internalSpecProperties.set(++specId, properties);
+  return specId;
 }
 
 export function retrieveInternalSpecProperties(): InternalSpecProperties {
-  const reference = Cypress.env(INTERNAL_SPEC_PROPERTIES) as string;
+  const reference = Cypress.env(INTERNAL_SPEC_PROPERTIES) as number;
 
   return assertAndReturn(
     internalSpecProperties.get(reference),
