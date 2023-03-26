@@ -44,32 +44,32 @@ export default defineConfig({
         omitAfterScreenshotHandler: true,
       });
 
-      on("before:run", () => {
-        beforeRunHandler(config);
+      on("before:run", async (details) => {
+        await beforeRunHandler(config);
 
         // Your own `before:run` code goes here.
       });
 
-      on("after:run", () => {
-        afterRunHandler(config);
+      on("after:run", async (results) => {
+        await afterRunHandler(config);
 
         // Your own `after:run` code goes here.
       });
 
-      on("before:spec", () => {
-        beforeSpecHandler(config);
+      on("before:spec", async (spec) => {
+        await beforeSpecHandler(config);
 
         // Your own `before:spec` code goes here.
       });
 
-      on("after:spec", (spec, results) => {
-        afterSpecHandler(config, spec, results);
+      on("after:spec", async (spec, results) => {
+        await afterSpecHandler(config, spec, results);
 
         // Your own `after:spec` code goes here.
       });
 
-      on("after:screenshot", (details) => {
-        afterScreenshotHandler(config, details);
+      on("after:screenshot", async (details) => {
+        await afterScreenshotHandler(config, details);
 
         // Your own `after:screenshot` code goes here.
       });
