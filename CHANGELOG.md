@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## v16.0.0
 
 - Correctly set `willBeRetried` in messages reports, fixes [#849](https://github.com/badeball/cypress-cucumber-preprocessor/issues/849).
 
