@@ -20,7 +20,7 @@ export async function setupNodeEvents(on, config) {
 
 export default defineConfig({
   e2e: {
-    specPattern: "**/*.feature",
+    specPattern: "cypress/e2e/**/*.feature",
     setupNodeEvents,
   },
 });

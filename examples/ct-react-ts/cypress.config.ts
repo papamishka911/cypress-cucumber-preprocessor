@@ -38,7 +38,7 @@ const webpackConfig = (
 
 export default defineConfig({
   component: {
-    specPattern: "**/*.feature",
+    specPattern: "cypress/e2e/**/*.feature",
     devServer(devServerConfig) {
       return devServer({
         ...devServerConfig,
