@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
 
 - Replace [cucumber-json-formatter](https://github.com/cucumber/json-formatter) with native components, relates to [#795](https://github.com/badeball/cypress-cucumber-preprocessor/issues/795), [#827](https://github.com/badeball/cypress-cucumber-preprocessor/issues/827), [#870](https://github.com/badeball/cypress-cucumber-preprocessor/issues/870), [#966](https://github.com/badeball/cypress-cucumber-preprocessor/issues/966) and [#967](https://github.com/badeball/cypress-cucumber-preprocessor/issues/967).
 
+  - If you previously had configured `specPattern` to equal `**/*.feature` (or similar), then you should change it to `cypress/e2e/**/*.feature` in order to not accidentally include feature files located in `node_modules`. This will otherwise interfere with the calculation of the *common ancestor path* and thus step definition resolution.
+
 - Use deterministic, internal IDs, fixes [#948](https://github.com/badeball/cypress-cucumber-preprocessor/issues/948) to some degree..
 
 ## v15.1.5
