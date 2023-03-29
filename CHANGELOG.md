@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+- Correctly set `willBeRetried` non-retried tests, fixes [#977](https://github.com/badeball/cypress-cucumber-preprocessor/issues/977).
+
 ## v16.0.0
 
 - Correctly set `willBeRetried` in messages reports, fixes [#849](https://github.com/badeball/cypress-cucumber-preprocessor/issues/849).

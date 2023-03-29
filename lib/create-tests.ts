@@ -825,11 +825,14 @@ export default function createTests(
       "Expected to find an attribute _retries"
     );
 
+    const willBeRetried =
+      this.currentTest?.state === "failed" ? currentRetry < retries : false;
+
     messages.push({
       testCaseFinished: {
         testCaseStartedId,
         timestamp: endTimestamp,
-        willBeRetried: currentRetry < retries,
+        willBeRetried,
       },
     });
 
