@@ -782,6 +782,18 @@ export default function createTests(
             },
           });
         }
+
+        const stepAfter = remainingSteps.find((skippedStep) => {
+          return skippedStep.hook && skippedStep.hook.keyword === 'After';
+        });
+
+        if (this.currentTest === stepAfter && this.currentTest?.state === "failed") {
+            throw new Error("Running other scenarios has stopped cause current scenario failed");
+        }
+
+        if (stepAfter && stepAfter.hook) {
+            registry.runHook(this, stepAfter.hook);
+        }
       } else {
         for (const skippedStep of remainingSteps) {
           const testStepId = assertAndReturn(
